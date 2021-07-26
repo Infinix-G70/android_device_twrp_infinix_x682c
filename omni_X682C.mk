@@ -15,26 +15,30 @@
 # limitations under the License.
 #
 
+# Dynamic
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
 
-# Inherit some common PitchBlack stuff.
-$(call inherit-product, vendor/pb/config/common.mk)
+# Inherit from our Omni configuration
+$(call inherit-product, vendor/omni/config/common.mk)
 
-# Device identifier. This must come after all inclusions
-PRODUCT_DEVICE := X682C
-PRODUCT_NAME := omni_X682C
-PRODUCT_BRAND := Infinix
-PRODUCT_MODEL := Infinix Hot 10
-PRODUCT_MANUFACTURER := infinix
-
-PRODUCT_SHIPPING_API_LEVEL := 29
-
-# Dynamic Partition
-PRODUCT_USE_DYNAMIC_PARTITIONS := true
+PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,$(LOCAL_PATH)/recovery/root,recovery/root)
 
 # Fastbootd
 PRODUCT_PACKAGES += \
     android.hardware.fastboot@1.0-impl-mock \
     android.hardware.fastboot@1.0-impl-mock.recovery
+
+## Device identifier. This must come after all inclusions
+PRODUCT_DEVICE := Infinix-X682C
+PRODUCT_NAME := omni_X682C
+PRODUCT_BRAND := infinix
+PRODUCT_MODEL := Infinix-X682C
+PRODUCT_MANUFACTURER := infinix
+
+# HACK: Set vendor patch level
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.build.security_patch=2099-12-31
